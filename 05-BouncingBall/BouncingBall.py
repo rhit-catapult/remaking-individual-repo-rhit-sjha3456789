@@ -1,24 +1,42 @@
 import pygame
 import sys
 import random
+import time
 
-
+ball_radius = 25
 # You will implement this module ENTIRELY ON YOUR OWN!
 
 # TODO: Create a Ball class.
-# TODO: Possible member variables: screen, color, x, y, radius, speed_x, speed_y
-# TODO: Methods: __init__, draw, move
+class Ball:
+    def __init__(self, screen, x, y):
+        self.screen = screen
+        self.color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+        self.x = x
+        self.y = y
+        self.speed_x = random.randint(1, 5)
+        self.speed_y = random.randint(1,5)
+    def move(self):
+        self.x += self.speed_x
+        self.y += self.speed_y
+    def draw(self):
+        pygame.draw.circle(self.screen,self.color, (self.x, self.y), ball_radius)
+    def collide(self, ):
+        if self.x < 0 + ball_radius or self.x > self.screen.get_width() - ball_radius:
+            self.speed_x *= -1
+        if self.y < 0 + ball_radius or self.y > self.screen.get_height() - ball_radius:
+            self.speed_y *= -1
 
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((300, 300))
+    screen = pygame.display.set_mode((200, 600))
     pygame.display.set_caption('Bouncing Ball')
     screen.fill(pygame.Color('gray'))
     clock = pygame.time.Clock()
-
-    # TODO: Create an instance of the Ball class called ball1
-
+    ball1 = Ball(screen, random.randint(ball_radius, screen.get_width() - ball_radius),
+                 random.randint(ball_radius, screen.get_width() - ball_radius))
+    ball2 = Ball(screen, random.randint(ball_radius, screen.get_width() - ball_radius),
+                 random.randint(ball_radius, screen.get_width() - ball_radius))
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -27,8 +45,13 @@ def main():
         clock.tick(60)
         screen.fill(pygame.Color('gray'))
 
-        # TODO: Move the ball
-        # TODO: Draw the ball
+
+        ball1.move()
+        ball1.collide()
+        ball1.draw()
+        ball2.move()
+        ball2.collide()
+        ball2.draw()
 
         pygame.display.update()
 
